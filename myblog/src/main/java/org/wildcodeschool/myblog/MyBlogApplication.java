@@ -1,13 +1,13 @@
-package org.wildcodeschool.myproject;
+package org.wildcodeschool.myblog;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class MyProjectApplication {
+public class MyBlogApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(MyProjectApplication.class, args);
+		SpringApplication.run(MyBlogApplication.class, args);
 	}
 
 }
