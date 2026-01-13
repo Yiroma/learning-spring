@@ -1,8 +1,14 @@
 package org.wildcodeschool.myblog.controller;
 
+import java.util.List;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.wildcodeschool.myblog.model.Article;
 import org.wildcodeschool.myblog.repository.ArticleRepository;
+
 
 @RestController
 @RequestMapping("/articles")
@@ -10,11 +16,18 @@ public class ArticleController {
 
     private final ArticleRepository articleRepository;
 
-    private final ArticleController articleController;
-
     public ArticleController(ArticleRepository articleRepository) {
         this.articleRepository = articleRepository;
     }
+
+    @GetMapping
+    public ResponseEntity<List<Article>>getAllArticles() {
+        List<Article> articles = articleRepository.findAll();
+        if(articles.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.ok(articles);
+        }
+    }
     
-    // CRUD methods will be added here
 }
