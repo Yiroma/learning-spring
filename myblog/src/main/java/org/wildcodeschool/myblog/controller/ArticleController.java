@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -49,6 +50,21 @@ public class ArticleController {
 
         Article savedArticle = articleRepository.save(article);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedArticle);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Article> updateArticle(@PathVariable Long id, @RequestBody Article articleDetails) {
+        Article article = articleRepository.findById(id).orElse(null);
+        if (article == null) {
+            return ResponseEntity.notFound().build();
+
+        }
+        article.setTitle((articleDetails.getTitle()));
+        article.setContent(articleDetails.getContent());
+        article.setUpdatedAt(LocalDateTime.now());
+
+        Article updatedArticle = articleRepository.save(article);
+        return ResponseEntity.ok(updatedArticle);
     }
 
 }
