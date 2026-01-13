@@ -26,6 +26,7 @@ public class ArticleController {
         this.articleRepository = articleRepository;
     }
 
+    // Browse of BREAD (or Read of CRUD) => get all articles
     @GetMapping
     public ResponseEntity<List<Article>> getAllArticles() {
         List<Article> articles = articleRepository.findAll();
@@ -35,6 +36,7 @@ public class ArticleController {
         return ResponseEntity.ok(articles);
     }
 
+    // Read of BREAD (or Read of CRUD) => get one article by id
     @GetMapping("/{id}")
     public ResponseEntity<Article> getArticleById(@PathVariable Long id) {
         Article article = articleRepository.findById(id).orElse(null);
@@ -44,6 +46,7 @@ public class ArticleController {
         return ResponseEntity.ok(article);
     }
 
+    // Add of BREAD (or Create of CRUD) => create a new article
     @PostMapping
     public ResponseEntity<Article> createArticle(@RequestBody Article article) {
         article.setCreatedAt(LocalDateTime.now());
@@ -53,6 +56,7 @@ public class ArticleController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedArticle);
     }
 
+    // Edit of BREAD (or Update of CRUD) => update an existing article
     @PutMapping("/{id}")
     public ResponseEntity<Article> updateArticle(@PathVariable Long id, @RequestBody Article articleDetails) {
         Article article = articleRepository.findById(id).orElse(null);
@@ -68,6 +72,7 @@ public class ArticleController {
         return ResponseEntity.ok(updatedArticle);
     }
 
+    // Delete of BREAD (or Delete of CRUD) => delete an article
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteArticle(@PathVariable Long id) {
         Article article = articleRepository.findById(id).orElse(null);
