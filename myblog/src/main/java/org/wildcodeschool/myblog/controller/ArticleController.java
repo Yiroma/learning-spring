@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.wildcodeschool.myblog.model.Article;
 import org.wildcodeschool.myblog.repository.ArticleRepository;
@@ -44,6 +45,47 @@ public class ArticleController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(article);
+    }
+
+    // Search articles by title
+    @GetMapping("/search-title")
+    public ResponseEntity<List<Article>> getArticlesByTitle(@RequestParam String searchTerms) {
+        List<Article> articles = articleRepository.findByTitle(searchTerms);
+        if (articles.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(articles);
+    }
+
+    // Search articles by content
+    @GetMapping("/search-content")
+    public ResponseEntity<List<Article>> getArticlesByContent(@RequestParam String searchTerms) {
+        List<Article> articles = articleRepository.findByContentContaining(searchTerms);
+        if (articles.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(articles);
+    }
+
+    // Search articles created after a specific date
+    @GetMapping("/search-after")
+    public ResponseEntity<List<Article>> getArticlesCreatedAfter(@RequestParam String dateTime) {
+        LocalDateTime createdAt = LocalDateTime.parse(dateTime);
+        List<Article> articles = articleRepository.findByCreatedAtAfter(createdAt);
+        if (articles.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(articles);
+    }
+
+    // Search last 5 articles
+    @GetMapping("/search-last-five")
+    public ResponseEntity<List<Article>> getArticlesLastFive() {
+        List<Article> articles = articleRepository.findTop5ByOrderByCreatedAtDesc();
+        if (articles.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(articles);
     }
 
     // Add of BREAD (or Create of CRUD) => create a new article
