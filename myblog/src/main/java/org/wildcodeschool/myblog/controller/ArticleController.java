@@ -1,9 +1,5 @@
 package org.wildcodeschool.myblog.controller;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,6 +17,10 @@ import org.wildcodeschool.myblog.model.Category;
 import org.wildcodeschool.myblog.repository.ArticleRepository;
 import org.wildcodeschool.myblog.repository.CategoryRepository;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("/articles")
 public class ArticleController {
@@ -35,7 +35,6 @@ public class ArticleController {
         this.categoryRepository = categoryRepository;
     }
 
-    // Mapper from Article to ArticleDTO
     private ArticleDTO convertToDTO(Article article) {
         ArticleDTO articleDTO = new ArticleDTO();
         articleDTO.setId(article.getId());
@@ -48,7 +47,6 @@ public class ArticleController {
         return articleDTO;
     }
 
-    // Browse of BREAD (or Read of CRUD) => get all articles
     @GetMapping
     public ResponseEntity<List<ArticleDTO>> getAllArticles() {
         List<Article> articles = articleRepository.findAll();
@@ -59,7 +57,6 @@ public class ArticleController {
         return ResponseEntity.ok(articleDTOs);
     }
 
-    // Read of BREAD (or Read of CRUD) => get one article by id
     @GetMapping("/{id}")
     public ResponseEntity<ArticleDTO> getArticleById(@PathVariable Long id) {
         Article article = articleRepository.findById(id).orElse(null);
@@ -69,7 +66,6 @@ public class ArticleController {
         return ResponseEntity.ok(convertToDTO(article));
     }
 
-    // Search articles by title
     @GetMapping("/search-title")
     public ResponseEntity<List<Article>> getArticlesByTitle(@RequestParam String searchTerms) {
         List<Article> articles = articleRepository.findByTitle(searchTerms);
@@ -79,7 +75,6 @@ public class ArticleController {
         return ResponseEntity.ok(articles);
     }
 
-    // Search articles by content
     @GetMapping("/search-content")
     public ResponseEntity<List<Article>> getArticlesByContent(@RequestParam String searchTerms) {
         List<Article> articles = articleRepository.findByContentContaining(searchTerms);
@@ -89,7 +84,6 @@ public class ArticleController {
         return ResponseEntity.ok(articles);
     }
 
-    // Search articles created after a specific date
     @GetMapping("/search-after")
     public ResponseEntity<List<Article>> getArticlesCreatedAfter(@RequestParam String dateTime) {
         LocalDateTime createdAt = LocalDateTime.parse(dateTime);
@@ -100,7 +94,6 @@ public class ArticleController {
         return ResponseEntity.ok(articles);
     }
 
-    // Search last 5 articles
     @GetMapping("/search-last-five")
     public ResponseEntity<List<Article>> getArticlesLastFive() {
         List<Article> articles = articleRepository.findTop5ByOrderByCreatedAtDesc();
@@ -110,7 +103,6 @@ public class ArticleController {
         return ResponseEntity.ok(articles);
     }
 
-    // Add of BREAD (or Create of CRUD) => create a new article
     @PostMapping
     public ResponseEntity<ArticleDTO> createArticle(@RequestBody Article article) {
         article.setCreatedAt(LocalDateTime.now());
@@ -128,7 +120,6 @@ public class ArticleController {
         return ResponseEntity.status(HttpStatus.CREATED).body(convertToDTO(savedArticle));
     }
 
-    // Edit of BREAD (or Update of CRUD) => update an existing article
     @PutMapping("/{id}")
     public ResponseEntity<ArticleDTO> updateArticle(@PathVariable Long id, @RequestBody Article articleDetails) {
         Article article = articleRepository.findById(id).orElse(null);
@@ -152,7 +143,6 @@ public class ArticleController {
         return ResponseEntity.ok(convertToDTO(updatedArticle));
     }
 
-    // Delete of BREAD (or Delete of CRUD) => delete an article
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteArticle(@PathVariable Long id) {
         Article article = articleRepository.findById(id).orElse(null);
