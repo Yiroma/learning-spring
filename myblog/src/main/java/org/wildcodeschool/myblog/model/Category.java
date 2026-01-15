@@ -1,5 +1,7 @@
 package org.wildcodeschool.myblog.model;
 
+import java.util.List;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -11,6 +13,9 @@ public class Category {
 
     @Column(nullable = false, length = 50)
     private String name;
+
+    @OneToMany(mappedBy = "category")
+    private List<Article> articles;
 
     // Getters et setters
 
