@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.wildcodeschool.myblog.dto.CategoryDTO;
+import org.wildcodeschool.myblog.exception.ResourceNotFoundException;
 import org.wildcodeschool.myblog.mapper.CategoryMapper;
 import org.wildcodeschool.myblog.model.Category;
 import org.wildcodeschool.myblog.repository.CategoryRepository;
@@ -26,10 +27,8 @@ public class CategoryService {
     }
 
     public CategoryDTO getCategoryById(Long id) {
-        Category category = categoryRepository.findById(id).orElse(null);
-        if (category == null) {
-            return null;
-        }
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Category with id " + id + " is not found"));
         return categoryMapper.convertToDTO(category);
     }
 
@@ -41,20 +40,16 @@ public class CategoryService {
     }
 
     public CategoryDTO updateCategory(Long id, CategoryDTO categoryDTO) {
-        Category category = categoryRepository.findById(id).orElse(null);
-        if (category == null) {
-            return null;
-        }
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Category with id " + id + " is not found"));
         category.setName(categoryDTO.getName());
         Category updatedCategory = categoryRepository.save(category);
         return categoryMapper.convertToDTO(updatedCategory);
     }
 
     public boolean deleteCategory(Long id) {
-        Category category = categoryRepository.findById(id).orElse(null);
-        if (category == null) {
-            return false;
-        }
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Category with id " + id + " is not found"));
         categoryRepository.delete(category);
         return true;
     }

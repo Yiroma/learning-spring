@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.wildcodeschool.myblog.dto.ImageDTO;
+import org.wildcodeschool.myblog.exception.ResourceNotFoundException;
 import org.wildcodeschool.myblog.mapper.ImageMapper;
 import org.wildcodeschool.myblog.model.Image;
 import org.wildcodeschool.myblog.repository.ImageRepository;
@@ -26,10 +27,8 @@ public class ImageService {
     }
 
     public ImageDTO getImageById(Long id) {
-        Image image = imageRepository.findById(id).orElse(null);
-        if (image == null) {
-            return null;
-        }
+        Image image = imageRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Image with id " + id + " is not found"));
         return imageMapper.convertToDTO(image);
     }
 
@@ -41,20 +40,16 @@ public class ImageService {
     }
 
     public ImageDTO updateImage(Long id, ImageDTO imageDTO) {
-        Image image = imageRepository.findById(id).orElse(null);
-        if (image == null) {
-            return null;
-        }
+        Image image = imageRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Image with id " + id + " is not found"));
         image.setUrl(imageDTO.getUrl());
         Image updatedImage = imageRepository.save(image);
         return imageMapper.convertToDTO(updatedImage);
     }
 
     public boolean deleteImage(Long id) {
-        Image image = imageRepository.findById(id).orElse(null);
-        if (image == null) {
-            return false;
-        }
+        Image image = imageRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Image with id " + id + " is not found"));
         imageRepository.delete(image);
         return true;
     }
