@@ -18,4 +18,9 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error has occurred");
     }
 
+    @ExceptionHandler(InvalidRelationException.class)
+    public ResponseEntity<String> handleInvalidRelation(InvalidRelationException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
 }
