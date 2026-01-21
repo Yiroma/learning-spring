@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.wildcodeschool.myblog.dto.ArticleDTO;
+import org.wildcodeschool.myblog.exception.InvalidRelationException;
 import org.wildcodeschool.myblog.exception.ResourceNotFoundException;
 import org.wildcodeschool.myblog.mapper.ArticleMapper;
 import org.wildcodeschool.myblog.model.Article;
@@ -61,10 +62,9 @@ public class ArticleService {
         article.setUpdatedAt(LocalDateTime.now());
 
         if (article.getCategory() != null) {
-            Category category = categoryRepository.findById(article.getCategory().getId()).orElse(null);
-            if (category == null) {
-                return null;
-            }
+            Category category = categoryRepository.findById(article.getCategory().getId())
+                    .orElseThrow(() -> new InvalidRelationException(
+                            "Category with id " + article.getCategory().getId() + " does not exist"));
             article.setCategory(category);
         }
 
@@ -72,12 +72,10 @@ public class ArticleService {
             List<Image> validImages = new ArrayList<>();
             for (Image image : article.getImages()) {
                 if (image.getId() != null) {
-                    Image existingImage = imageRepository.findById(image.getId()).orElse(null);
-                    if (existingImage != null) {
-                        validImages.add(existingImage);
-                    } else {
-                        return null;
-                    }
+                    Image existingImage = imageRepository.findById(image.getId())
+                            .orElseThrow(() -> new InvalidRelationException(
+                                    "Image with id " + image.getId() + " does not exist"));
+                    validImages.add(existingImage);
                 } else {
                     Image savedImage = imageRepository.save(image);
                     validImages.add(savedImage);
@@ -91,10 +89,9 @@ public class ArticleService {
         if (article.getArticleAuthors() != null) {
             for (ArticleAuthor articleAuthor : article.getArticleAuthors()) {
                 Author author = articleAuthor.getAuthor();
-                author = authorRepository.findById(author.getId()).orElse(null);
-                if (author == null) {
-                    return null;
-                }
+                author = authorRepository.findById(author.getId())
+                        .orElseThrow(() -> new InvalidRelationException(
+                                "Author with id " + articleAuthor.getAuthor().getId() + " does not exist"));
 
                 articleAuthor.setAuthor(author);
                 articleAuthor.setArticle(savedArticle);
@@ -115,10 +112,9 @@ public class ArticleService {
         article.setUpdatedAt(LocalDateTime.now());
 
         if (articleDetails.getCategory() != null) {
-            Category category = categoryRepository.findById(articleDetails.getCategory().getId()).orElse(null);
-            if (category == null) {
-                return null;
-            }
+            Category category = categoryRepository.findById(articleDetails.getCategory().getId())
+                    .orElseThrow(() -> new InvalidRelationException(
+                            "Category with id " + articleDetails.getCategory().getId() + " does not exist"));
             article.setCategory(category);
         }
 
@@ -126,12 +122,10 @@ public class ArticleService {
             List<Image> validImages = new ArrayList<>();
             for (Image image : articleDetails.getImages()) {
                 if (image.getId() != null) {
-                    Image existingImage = imageRepository.findById(image.getId()).orElse(null);
-                    if (existingImage != null) {
-                        validImages.add(existingImage);
-                    } else {
-                        return null;
-                    }
+                    Image existingImage = imageRepository.findById(image.getId())
+                            .orElseThrow(() -> new InvalidRelationException(
+                                    "Image with id " + image.getId() + " does not exist"));
+                    validImages.add(existingImage);
                 } else {
                     Image savedImage = imageRepository.save(image);
                     validImages.add(savedImage);
@@ -151,10 +145,8 @@ public class ArticleService {
 
             for (ArticleAuthor articleAuthorDetails : articleDetails.getArticleAuthors()) {
                 Author author = articleAuthorDetails.getAuthor();
-                author = authorRepository.findById(author.getId()).orElse(null);
-                if (author == null) {
-                    return null;
-                }
+                author = authorRepository.findById(author.getId()).orElseThrow(() -> new InvalidRelationException(
+                        "Author with id " + articleAuthorDetails.getAuthor().getId() + " does not exist"));
 
                 ArticleAuthor newArticleAuthor = new ArticleAuthor();
                 newArticleAuthor.setAuthor(author);
