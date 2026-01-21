@@ -108,10 +108,8 @@ public class ArticleService {
     }
 
     public ArticleDTO updateArticle(Long id, Article articleDetails) {
-        Article article = articleRepository.findById(id).orElse(null);
-        if (article == null) {
-            return null;
-        }
+        Article article = articleRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Article with id " + id + " is not found"));
         article.setTitle(articleDetails.getTitle());
         article.setContent(articleDetails.getContent());
         article.setUpdatedAt(LocalDateTime.now());
@@ -178,10 +176,8 @@ public class ArticleService {
     }
 
     public boolean deleteArticle(Long id) {
-        Article article = articleRepository.findById(id).orElse(null);
-        if (article == null) {
-            return false;
-        }
+        Article article = articleRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Article with id " + id + " is not found"));
 
         articleAuthorRepository.deleteAll(article.getArticleAuthors());
         articleRepository.delete(article);
