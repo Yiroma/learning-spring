@@ -1,11 +1,13 @@
 package org.wildcodeschool.myblog.dto;
 
-import java.util.List;
+import org.hibernate.validator.constraints.URL;
 
 public class ImageDTO {
+
     private Long id;
+
+    @URL(message = "URL must be valid")
     private String url;
-    private List<Long> articleIds;
 
     // Getters and Setters
 
@@ -25,11 +27,4 @@ public class ImageDTO {
         this.url = url;
     }
 
-    public List<Long> getArticleIds() {
-        return articleIds;
-    }
-
-    public void setArticleIds(List<Long> articleIds) {
-        this.articleIds = articleIds;
-    }
 }
