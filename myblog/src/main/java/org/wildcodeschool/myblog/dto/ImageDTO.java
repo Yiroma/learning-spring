@@ -1,5 +1,7 @@
 package org.wildcodeschool.myblog.dto;
 
+import java.util.List;
+
 import org.hibernate.validator.constraints.URL;
 
 public class ImageDTO {
@@ -25,6 +27,11 @@ public class ImageDTO {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public void setArticleIds(List<Long> collect) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setArticleIds'");
     }
 
 }
