@@ -1,18 +1,17 @@
 package org.wildcodeschool.myblog.dto;
 
-import java.util.List;
-
 import org.hibernate.validator.constraints.URL;
+import jakarta.validation.constraints.NotBlank;
 
 public class ImageDTO {
 
     private Long id;
 
-    @URL(message = "URL must be valid")
+    @NotBlank(message = "Image URL must not be blank")
+    @URL(message = "Image URL must be valid")
     private String url;
 
     // Getters and Setters
-
     public Long getId() {
         return id;
     }
@@ -28,10 +27,4 @@ public class ImageDTO {
     public void setUrl(String url) {
         this.url = url;
     }
-
-    public void setArticleIds(List<Long> collect) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setArticleIds'");
-    }
-
 }

@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import org.wildcodeschool.myblog.dto.ImageDTO;
 import org.wildcodeschool.myblog.service.ImageService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/images")
 public class ImageController {
@@ -37,13 +39,13 @@ public class ImageController {
     }
 
     @PostMapping
-    public ResponseEntity<ImageDTO> createImage(@RequestBody ImageDTO imageDTO) {
+    public ResponseEntity<ImageDTO> createImage(@Valid @RequestBody ImageDTO imageDTO) {
         ImageDTO savedImage = imageService.createImage(imageDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedImage);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ImageDTO> updateImage(@PathVariable Long id, @RequestBody ImageDTO imageDTO) {
+    public ResponseEntity<ImageDTO> updateImage(@PathVariable Long id, @Valid @RequestBody ImageDTO imageDTO) {
         ImageDTO updatedImage = imageService.updateImage(id, imageDTO);
         if (updatedImage == null) {
             return ResponseEntity.notFound().build();
