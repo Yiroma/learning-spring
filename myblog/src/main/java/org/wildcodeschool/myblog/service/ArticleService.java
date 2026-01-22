@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.wildcodeschool.myblog.dto.ArticleCreateDTO;
 import org.wildcodeschool.myblog.dto.ArticleDTO;
+import org.wildcodeschool.myblog.dto.ArticleUpdateDTO;
 import org.wildcodeschool.myblog.exception.InvalidRelationException;
 import org.wildcodeschool.myblog.exception.ResourceNotFoundException;
 import org.wildcodeschool.myblog.mapper.ArticleMapper;
@@ -106,9 +107,11 @@ public class ArticleService {
         return articleMapper.convertToDTO(savedArticle);
     }
 
-    public ArticleDTO updateArticle(Long id, Article articleDetails) {
+    public ArticleDTO updateArticle(Long id, ArticleUpdateDTO articleUpdateDTO) {
         Article article = articleRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Article with id " + id + " is not found"));
+        Article articleDetails = articleMapper.convertToEntity(articleUpdateDTO);
+
         article.setTitle(articleDetails.getTitle());
         article.setContent(articleDetails.getContent());
         article.setUpdatedAt(LocalDateTime.now());
@@ -146,9 +149,9 @@ public class ArticleService {
             List<ArticleAuthor> updatedArticleAuthors = new ArrayList<>();
 
             for (ArticleAuthor articleAuthorDetails : articleDetails.getArticleAuthors()) {
-                Author author = articleAuthorDetails.getAuthor();
-                author = authorRepository.findById(author.getId()).orElseThrow(() -> new InvalidRelationException(
-                        "Author with id " + articleAuthorDetails.getAuthor().getId() + " does not exist"));
+                Author author = authorRepository.findById(articleAuthorDetails.getAuthor().getId())
+                        .orElseThrow(() -> new InvalidRelationException(
+                                "Author with id " + articleAuthorDetails.getAuthor().getId() + " does not exist"));
 
                 ArticleAuthor newArticleAuthor = new ArticleAuthor();
                 newArticleAuthor.setAuthor(author);

@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 import org.wildcodeschool.myblog.dto.ArticleCreateDTO;
 import org.wildcodeschool.myblog.dto.ArticleDTO;
+import org.wildcodeschool.myblog.dto.ArticleUpdateDTO;
 import org.wildcodeschool.myblog.dto.AuthorDTO;
 import org.wildcodeschool.myblog.model.Article;
 import org.wildcodeschool.myblog.model.ArticleAuthor;
@@ -44,6 +45,42 @@ public class ArticleMapper {
     }
 
     public Article convertToEntity(ArticleCreateDTO dto) {
+        Article article = new Article();
+        article.setTitle(dto.getTitle());
+        article.setContent(dto.getContent());
+
+        if (dto.getCategoryId() != null) {
+            Category category = new Category();
+            category.setId(dto.getCategoryId());
+            article.setCategory(category);
+        }
+
+        if (dto.getImages() != null) {
+            List<Image> images = dto.getImages().stream().map(imageDTO -> {
+                Image image = new Image();
+                image.setId(imageDTO.getId());
+                image.setUrl(imageDTO.getUrl());
+                return image;
+            }).collect(Collectors.toList());
+            article.setImages(images);
+        }
+
+        if (dto.getAuthors() != null) {
+            List<ArticleAuthor> articleAuthors = dto.getAuthors().stream().map(authorDTO -> {
+                ArticleAuthor articleAuthor = new ArticleAuthor();
+                Author author = new Author();
+                author.setId(authorDTO.getAuthorId());
+                articleAuthor.setAuthor(author);
+                articleAuthor.setContribution(authorDTO.getContribution());
+                return articleAuthor;
+            }).collect(Collectors.toList());
+            article.setArticleAuthors(articleAuthors);
+        }
+
+        return article;
+    }
+
+    public Article convertToEntity(ArticleUpdateDTO dto) {
         Article article = new Article();
         article.setTitle(dto.getTitle());
         article.setContent(dto.getContent());

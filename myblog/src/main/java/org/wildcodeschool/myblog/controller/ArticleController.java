@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.wildcodeschool.myblog.dto.ArticleCreateDTO;
 import org.wildcodeschool.myblog.dto.ArticleDTO;
-import org.wildcodeschool.myblog.model.Article;
+import org.wildcodeschool.myblog.dto.ArticleUpdateDTO;
 import org.wildcodeschool.myblog.service.ArticleService;
 
 import jakarta.validation.Valid;
@@ -47,8 +47,9 @@ public class ArticleController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ArticleDTO> updateArticle(@PathVariable Long id, @RequestBody Article articleDetails) {
-        ArticleDTO updatedArticle = articleService.updateArticle(id, articleDetails);
+    public ResponseEntity<ArticleDTO> updateArticle(@PathVariable Long id,
+            @Valid @RequestBody ArticleUpdateDTO articleUpdateDTO) {
+        ArticleDTO updatedArticle = articleService.updateArticle(id, articleUpdateDTO);
         if (updatedArticle == null) {
             return ResponseEntity.notFound().build();
         }
