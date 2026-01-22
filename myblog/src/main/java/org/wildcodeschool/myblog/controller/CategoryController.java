@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import org.wildcodeschool.myblog.dto.CategoryDTO;
 import org.wildcodeschool.myblog.service.CategoryService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/categories")
 public class CategoryController {
@@ -37,13 +39,14 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<CategoryDTO> createCategory(@RequestBody CategoryDTO categoryDTO) {
+    public ResponseEntity<CategoryDTO> createCategory(@Valid @RequestBody CategoryDTO categoryDTO) {
         CategoryDTO savedCategory = categoryService.createCategory(categoryDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedCategory);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CategoryDTO> updateCategory(@PathVariable Long id, @RequestBody CategoryDTO categoryDTO) {
+    public ResponseEntity<CategoryDTO> updateCategory(@PathVariable Long id,
+            @Valid @RequestBody CategoryDTO categoryDTO) {
         CategoryDTO updatedCategory = categoryService.updateCategory(id, categoryDTO);
         if (updatedCategory == null) {
             return ResponseEntity.notFound().build();
