@@ -1,14 +1,17 @@
 package org.wildcodeschool.myblog.dto;
 
-import java.util.List;
+import org.hibernate.validator.constraints.URL;
+import jakarta.validation.constraints.NotBlank;
 
 public class ImageDTO {
+
     private Long id;
+
+    @NotBlank(message = "Image URL must not be blank")
+    @URL(message = "Image URL must be valid")
     private String url;
-    private List<Long> articleIds;
 
     // Getters and Setters
-
     public Long getId() {
         return id;
     }
@@ -23,13 +26,5 @@ public class ImageDTO {
 
     public void setUrl(String url) {
         this.url = url;
-    }
-
-    public List<Long> getArticleIds() {
-        return articleIds;
-    }
-
-    public void setArticleIds(List<Long> articleIds) {
-        this.articleIds = articleIds;
     }
 }
