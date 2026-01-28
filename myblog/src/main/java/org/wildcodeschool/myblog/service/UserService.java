@@ -1,5 +1,6 @@
 package org.wildcodeschool.myblog.service;
 
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,6 +18,10 @@ public class UserService {
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+    }
+
+    public Optional<User> findById(Long id) {
+        return userRepository.findById(id);
     }
 
     public User registerUser(String email, String password, Set<String> roles) {
